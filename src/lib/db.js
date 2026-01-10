@@ -6,3 +6,4 @@ export const db = mysql.createPool({
     password: '',
     database: 'astro_db',
 });
+

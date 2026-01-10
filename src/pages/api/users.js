@@ -21,3 +21,25 @@ export async function POST({ request }){
         }
     )
 }
+
+// funcion para actualizar los datos del usuario 
+export async function PUT({ request }) {
+    const body = await request.json()
+    const { name  , id } = body
+
+    try {
+
+        await db.query('UPDATE users SET name = ? WHERE id = ? ' , [name , id])
+        return new Response(JSON.stringify({ ok: true, mensaje: "Usuario actualizado" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" }
+          });
+
+    }catch(e){
+
+        return new Response(JSON.stringify({
+            ok: false , message : e.message
+        }) , {status : 500})
+    }
+    
+}
