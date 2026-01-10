@@ -1,41 +1,82 @@
 ---
-let message = "";
+import Layout from '../layouts/Layout.astro';
 ---
 
-<h1>Crear usuario</h1>
+<Layout>
+    <header class="border-b border-gray-200 pb-2 pt-2 mb-3">
+        <div class="max-w-sm mx-auto flex items-center gap-3 text-gray-700 text-xs uppercase tracking-wide">
+            <a href="/" class="flex items-center gap-3 text-gray-700 text-xs uppercase tracking-wide">
+                <svg class="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                    <circle cx="12" cy="12" r="10" stroke="#374151" stroke-width="1.2" fill="none" />
+                    <path d="M4 12h16" stroke="#374151" stroke-width="0.9" stroke-linecap="round" />
+                </svg>
+                <div class="leading-none">
+                    <div class="font-medium text-gray-900">U.S. Government</div>
+                    <div class="text-[10px] text-gray-600">Department of Public Services</div>
+                </div>
+            </a>
+        </div>
+	</header>
 
-<form method="POST">
-    <input
-     type="text"
-     name="name"
-     placeholder="Nombre del usuario"
-     required
-    />
+    <div class="max-w-sm mx-auto mt-6">
+		<h1 class="text-base text-center mb-3 font-medium text-gray-900">Crear usuario</h1>
 
-    <button type="submit">Guardar</button>
-</form>
+        <div class="p-2">
+            <form method="POST" class="flex flex-col gap-2" id="createForm">
+                <label for="name" class="text-xs text-gray-700">Nombre</label>
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Nombre completo"
+                    class="w-full border-b border-gray-400 px-1 py-1 text-sm focus:outline-none focus:border-blue-700"
+                    required
+                />
 
-<p>{message}</p>
+                <button id="submitBtn" class="cursor-pointer w-full bg-blue-800 hover:bg-blue-900 text-white py-1 text-sm font-medium" type="submit">Guardar</button>
+            </form>
 
-<script>
-    const form = document.querySelector("form");
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+            <div id="successMsg" class="mt-2 hidden text-xs text-green-700">Usuario guardado — redirigiendo…</div>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('createForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMsg = document.getElementById('successMsg');
 
-        const formData = new FormData(form);
-        const name = formData.get("name");
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
 
-        const response = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
+            const formData = new FormData(form);
+            const name = formData.get('name');
+
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name }),
+                });
+
+                if (response.ok) {
+                    form.reset();
+                    successMsg.classList.remove('hidden');
+                    // Mostrar mensaje breve antes de redirigir
+                    setTimeout(() => location.replace('/'), 800);
+                } else {
+                    const errText = await response.text();
+                    alert('Error: ' + errText);
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                }
+            } catch (err) {
+                alert('Error de red: ' + err.message);
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
         });
+    </script>
+</Layout>
 
-        if (response.ok) {
-        alert("Usuario guardado");
-        form.reset();
-        }
-    });
-</script>
