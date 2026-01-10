@@ -1,0 +1,16 @@
+---
+export interface ButtonProps {
+  type?: 'button' | 'submit' | 'reset';
+  text: string;
+  disabled?: boolean;
+}
+const { type = 'button', text, disabled = false } = Astro.props as ButtonProps
+---
+
+<button
+    type={type}
+    class="cursor-pointer w-full bg-blue-800 hover:bg-blue-900 text-white py-1 text-sm font-medium disabled:opacity-70 disabled:cursor-not-allowed"
+    disabled={disabled}
+>
+    {text}
+</button>

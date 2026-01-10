@@ -1,0 +1,14 @@
+---
+export interface NavButtonProps {
+  href: string;
+  text: string;
+}
+const { href, text } = Astro.props as NavButtonProps;
+---
+
+<a
+    href={href}
+    class="w-full inline-block text-center bg-blue-800 hover:bg-blue-900 text-white py-1 text-sm font-medium"
+>
+    {text}
+</a>
