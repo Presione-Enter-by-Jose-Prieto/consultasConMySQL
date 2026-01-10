@@ -1,0 +1,41 @@
+---
+let message = "";
+---
+
+<h1>Crear usuario</h1>
+
+<form method="POST">
+    <input
+     type="text"
+     name="name"
+     placeholder="Nombre del usuario"
+     required
+    />
+
+    <button type="submit">Guardar</button>
+</form>
+
+<p>{message}</p>
+
+<script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const name = formData.get("name");
+
+        const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+        });
+
+        if (response.ok) {
+        alert("Usuario guardado");
+        form.reset();
+        }
+    });
+</script>
