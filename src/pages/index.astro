@@ -30,6 +30,7 @@ const users = await response.json();
 							<form action={`/api/users/${user.id}`} method="post" onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
 								<button type="submit" class="text-red-700 hover:underline">Eliminar</button>
 							</form>
+
 						</div>
 					</li>
 				))}
