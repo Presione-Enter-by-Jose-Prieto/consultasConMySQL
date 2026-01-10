@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+
+const { id } = Astro.params;
+
+const response = await fetch("http://localhost:4321/api/users/" + id);
+const user = await response.json();
+---
+
+<Layout>
+    <Header />
+
+    <div class="max-w-sm mx-auto mt-6">
+        <h1 class="text-base text-center mb-3 font-medium text-gray-900">Editar usuario</h1>
+
+        <div class="p-2">
+            <form method="POST" class="flex flex-col gap-2" id="editForm">
+                <label for="name" class="text-xs text-gray-700">Cambiar nombre</label>
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={user.name}
+                    placeholder="Nombre completo"
+                    class="w-full border-b border-gray-400 px-1 py-1 text-sm focus:outline-none focus:border-blue-700"
+                    required
+                />
+
+                <button id="submitBtn" class="cursor-pointer w-full bg-blue-800 hover:bg-blue-900 text-white py-1 text-sm font-medium" type="submit">Guardar</button>
+            </form>
+
+            <div id="successMsg" class="mt-2 hidden text-xs text-green-700">Usuario guardado — redirigiendo…</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('editForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name')?.value;
+            const id = window.location.pathname.split('/').pop();
+            
+            await fetch(`/api/users`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, id })
+            });
+            
+            document.getElementById('successMsg')?.classList.remove('hidden');
+            setTimeout(() => window.location.href = '/', 1500);
+        });
+    </script>
+</Layout>
+

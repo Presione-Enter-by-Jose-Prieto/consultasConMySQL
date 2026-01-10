@@ -7,41 +7,49 @@ const response = await fetch("http://localhost:4321/api/users");
 const users = await response.json();
 ---
 
-
 <Layout>
-	<Header />
+    <Header />
 
-	<div class="max-w-sm mx-auto mt-6">
-		<h1 class="text-base text-center mb-3 font-medium text-gray-900">Usuarios</h1>
+    <div class="max-w-sm mx-auto mt-6">
+        <h1 class="text-base text-center mb-3 font-medium text-gray-900">Usuarios</h1>
 
-		<div class="px-2 mb-2">
-			<NavButton href="/create" text="Crear nuevo usuario" />
-		</div>
-	</div>
+        <div class="px-2 mb-2">
+            <NavButton href="/create" text="Crear nuevo usuario" />
+        </div>
+    </div>
 
-	<div class="max-w-6xl mx-auto mt-6">
-		<div class="p-2">
-			<ul class="divide-y divide-gray-200 text-sm">
-				{users.map(user => (
-					<li class="py-2 flex items-center justify-between">
-						<span class="text-gray-800">{user.name}</span>
-						<!-- Asigna Acciones -->
-						<div>
-							<form action={`/api/users/${user.id}`} method="post" onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
-								<button type="submit" class="text-red-700 hover:underline">Eliminar</button>
-							</form>
+    <div class="max-w-4xl mx-auto mt-6">
+        <div class="p-2">
+            <ul class="divide-y divide-gray-200 text-sm">
+                {users.map(user => (
+                    <li class="py-2 flex items-center justify-between">
+                        <span class="text-gray-800">{user.name}</span>
+                        <!-- Asigna Acciones -->
+                        <div class="flex flex-row gap-4">
+                            <a href={`/${user.id}`} class="cursor-pointer text-gray-400 hover:text-blue-600 transition" title="Editar">
+                                <svg class="w-5 h-5 inline" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+                                    <path d="M20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                </svg>
+                            </a>
+                            <form action={`/api/users/${user.id}`} method="post" onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
+                                <button type="submit" class="cursor-pointer text-gray-400 hover:text-red-600 transition" title="Eliminar">
+                                    <svg class="w-5 h-5 inline" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-9l-1 1H5v2h14V4z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                ))}
+            </ul>
 
-						</div>
-					</li>
-				))}
-			</ul>
+            <div class="mt-2 text-xs text-gray-600 text-center">Total: {users.length}</div>
+        </div>
+    </div>
 
-			<div class="mt-2 text-xs text-gray-600 text-center">Total: {users.length}</div>
-		</div>
-	</div>
-
-	<footer class="max-w-sm mx-auto mt-4 text-center text-xs text-gray-600 pb-4">
-		<div>© {new Date().getFullYear()} Department of Public Services</div>
-		<div class="mt-1">For official use — Public access</div>
-	</footer>
+    <footer class="max-w-sm mx-auto mt-4 text-center text-xs text-gray-600 pb-4">
+        <div>© {new Date().getFullYear()} Department of Public Services</div>
+        <div class="mt-1">For official use — Public access</div>
+    </footer>
 </Layout>
