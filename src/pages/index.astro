@@ -6,10 +6,12 @@ import NavButton from '../components/NavButton.astro';
 interface User {
   id: number;
   name: string;
+  status?: boolean;
 }
 
 const response = await fetch("http://localhost:4321/api/users");
-const users: User[] = await response.json();
+let users: User[] = await response.json();
+users.sort((a, b) => b.id - a.id);
 ---
 
 <Layout title="Lista de usuarios">
@@ -28,7 +30,10 @@ const users: User[] = await response.json();
             <ul class="divide-y divide-gray-200 text-sm">
                 {users.map(user => (
                     <li class="py-2 flex items-center justify-between">
-                        <span class="text-gray-800">{user.name}</span>
+                        <div class="flex flex-row gap-1">
+                            <span class="text-gray-800">{user.name}</span>
+                            <span class="text-gray-400">{user.status ? <span class="text-blue-800">Activo</span> : 'Inactivo'}</span>
+                        </div>
                         <!-- Asigna Acciones -->
                         <div class="flex flex-row gap-4">
                             <a href={`/${user.id}`} class="cursor-pointer text-gray-400 hover:text-blue-600 transition" title="Editar">
