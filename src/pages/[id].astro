@@ -8,7 +8,7 @@ const response = await fetch("http://localhost:4321/api/users/" + id);
 const user = await response.json();
 ---
 
-<Layout>
+<Layout title={`Editar usuario ${user.name}`}>
     <Header />
 
     <div class="max-w-sm mx-auto mt-6">
@@ -35,9 +35,15 @@ const user = await response.json();
     </div>
 
     <script>
-        document.getElementById('editForm')?.addEventListener('submit', async (e) => {
+        const editForm = document.getElementById('editForm') as HTMLFormElement | null;
+        const nameInput = document.getElementById('name') as HTMLInputElement | null;
+        const successMsg = document.getElementById('successMsg') as HTMLElement | null;
+
+        if (!editForm || !nameInput) throw new Error('Form elements not found');
+
+        editForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('name')?.value;
+            const name = nameInput.value;
             const id = window.location.pathname.split('/').pop();
             
             await fetch(`/api/users`, {
@@ -46,7 +52,7 @@ const user = await response.json();
                 body: JSON.stringify({ name, id })
             });
             
-            document.getElementById('successMsg')?.classList.remove('hidden');
+            successMsg?.classList.remove('hidden');
             setTimeout(() => window.location.href = '/', 1500);
         });
     </script>

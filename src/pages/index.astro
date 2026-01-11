@@ -3,11 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import NavButton from '../components/NavButton.astro';
 
+interface User {
+  id: number;
+  name: string;
+}
+
 const response = await fetch("http://localhost:4321/api/users");
-const users = await response.json();
+const users: User[] = await response.json();
 ---
 
-<Layout>
+<Layout title="Lista de usuarios">
     <Header />
 
     <div class="max-w-sm mx-auto mt-6">

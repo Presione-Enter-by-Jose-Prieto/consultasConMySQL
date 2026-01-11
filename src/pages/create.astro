@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 ---
 
-<Layout>
+<Layout title="Crear usuario">
     <Header />
 
     <div class="max-w-sm mx-auto mt-6">
@@ -29,9 +29,11 @@ import Header from '../components/Header.astro';
     </div>
     
     <script>
-        const form = document.getElementById('createForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMsg = document.getElementById('successMsg');
+        const form = document.getElementById('createForm') as HTMLFormElement | null;
+        const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
+        const successMsg = document.getElementById('successMsg') as HTMLElement | null;
+
+        if (!form || !submitBtn || !successMsg) throw new Error('Form elements not found');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -60,7 +62,8 @@ import Header from '../components/Header.astro';
                     submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
                 }
             } catch (err) {
-                alert('Error de red: ' + err.message);
+                const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+                alert('Error de red: ' + errorMsg);
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
             }
