@@ -12,9 +12,10 @@ export async function GET(){
 export async function POST({ request }){
     const data = await request.json();
     const name = data.name;
+    const status = data.status;
 
-    await db.query('INSERT INTO users (name) VALUES (?)', [name]);
-    
+    await db.query('INSERT INTO users (name, status) VALUES (?, ?)', [name, status]);
+
     return new Response(
         JSON.stringify({ success: true }),{
             headers: { 'Content-Type': 'application/json' },
@@ -25,11 +26,11 @@ export async function POST({ request }){
 // funcion para actualizar los datos del usuario 
 export async function PUT({ request }) {
     const body = await request.json()
-    const { name  , id } = body
+    const { name  , id, status } = body
 
     try {
 
-        await db.query('UPDATE users SET name = ? WHERE id = ? ' , [name , id])
+        await db.query('UPDATE users SET name = ?, status = ? WHERE id = ? ' , [name, status, id])
         return new Response(JSON.stringify({ ok: true, mensaje: "Usuario actualizado" }), {
             status: 200,
             headers: { "Content-Type": "application/json" }

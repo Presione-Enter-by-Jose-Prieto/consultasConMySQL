@@ -20,7 +20,8 @@ import Header from '../components/Header.astro';
                     class="w-full border-b border-gray-400 px-1 py-1 text-sm focus:outline-none focus:border-blue-700"
                     required
                 />
-
+                <input type="text" name="status" id="status" value="1" hidden />
+                <div class="mt-2 text-xs text-gray-600 text-center">Por defecto tu estado será <span class="font-medium text-blue-800">Activo</span></div>
                 <button id="submitBtn" class="cursor-pointer w-full bg-blue-800 hover:bg-blue-900 text-white py-1 text-sm font-medium" type="submit">Guardar</button>
             </form>
 
@@ -42,12 +43,13 @@ import Header from '../components/Header.astro';
 
             const formData = new FormData(form);
             const name = formData.get('name');
+            const status = formData.get('status');
 
             try {
                 const response = await fetch('/api/users', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name }),
+                    body: JSON.stringify({ name, status }),
                 });
 
                 if (response.ok) {
